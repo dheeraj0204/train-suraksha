@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Header from '../components/Header';
 import { 
   Shield, 
@@ -12,11 +12,8 @@ import {
   CheckCircle,
   Volume2,
   Camera,
-  Navigation,
   Ambulance,
   X,
-  Eye,
-  EyeOff
 } from 'lucide-react';
 
 const SafetyDashboard: React.FC = () => {
@@ -86,9 +83,9 @@ const SafetyDashboard: React.FC = () => {
   const activatePanic = () => {
     setIsPanicActive(true);
     setIsRecording(true);
-    setCountdown(10);
+    setCountdown(10); // 10 seconds countdown
     setShowEmergencyMenu(false);
-    
+
     // Simulate location sharing and alerts
     const timer = setInterval(() => {
       setCountdown((prev) => {
@@ -109,7 +106,7 @@ const SafetyDashboard: React.FC = () => {
     setIsPanicActive(false);
     setIsRecording(false);
     setShowSuccessMessage(true);
-    
+
     // Hide success message after 5 seconds
     setTimeout(() => {
       setShowSuccessMessage(false);
@@ -126,7 +123,7 @@ const SafetyDashboard: React.FC = () => {
     setShowEmergencyMenu(false);
     let number = '';
     let message = '';
-    
+
     switch (type) {
       case 'police':
         number = '139';
@@ -143,9 +140,14 @@ const SafetyDashboard: React.FC = () => {
       default:
         return;
     }
-    
-    alert(`${message}\nDialing ${number}`);
+
+    alert(${message}\nDialing ${number});
   };
+
+  // Auto-trigger panic button on component mount
+  useEffect(() => {
+    activatePanic();
+  }, []);
 
   // Success Message Popup
   if (showSuccessMessage) {
@@ -157,10 +159,10 @@ const SafetyDashboard: React.FC = () => {
             <div className="p-4 bg-green-100 rounded-full w-16 h-16 mx-auto mb-4">
               <CheckCircle className="h-8 w-8 text-green-600" />
             </div>
-            
+
             <h2 className="text-2xl font-bold text-gray-900 mb-2">Alert Sent Successfully!</h2>
             <p className="text-gray-600 mb-4">Emergency call has been sent to the nearest local police station and Railway Police Force.</p>
-            
+
             <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
               <div className="text-green-800 text-sm space-y-1 text-left">
                 <p>✓ Location shared with authorities</p>
@@ -169,7 +171,7 @@ const SafetyDashboard: React.FC = () => {
                 <p>✓ Railway Police alerted</p>
               </div>
             </div>
-            
+
             <button 
               onClick={() => setShowSuccessMessage(false)}
               className="w-full bg-green-500 text-white py-3 rounded-lg hover:bg-green-600 transition-colors font-semibold"
@@ -242,7 +244,7 @@ const SafetyDashboard: React.FC = () => {
               {/* Safety Features Status */}
               <div className="space-y-3">
                 <h3 className="font-semibold text-gray-900">Safety Features</h3>
-                
+
                 <div className="p-3 bg-green-50 border border-green-200 rounded-lg">
                   <div className="flex items-center space-x-3">
                     <MapPin className="h-5 w-5 text-green-500" />
@@ -255,72 +257,53 @@ const SafetyDashboard: React.FC = () => {
 
                 <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
                   <div className="flex items-center space-x-3">
-                    <Camera className="h-5 w-5 text-blue-500" />
+                    <Mic className="h-5 w-5 text-blue-500" />
                     <div>
-                      <p className="font-medium text-blue-800">Auto Recording</p>
-                      <p className="text-sm text-blue-600">Emergency video/audio capture ready</p>
+                      <p className="font-medium text-blue-800">Voice Detection</p>
+                      <p className="text-sm text-blue-600">Listening for distress calls</p>
                     </div>
                   </div>
                 </div>
 
                 <div className="p-3 bg-purple-50 border border-purple-200 rounded-lg">
                   <div className="flex items-center space-x-3">
-                    <Clock className="h-5 w-5 text-purple-500" />
+                    <Camera className="h-5 w-5 text-purple-500" />
                     <div>
-                      <p className="font-medium text-purple-800">Quick Response</p>
-                      <p className="text-sm text-purple-600">Average response time: &lt; 2 minutes</p>
+                      <p className="font-medium text-purple-800">Auto Recording</p>
+                      <p className="text-sm text-purple-600">Recording emergency video/audio</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
+                  <div className="flex items-center space-x-3">
+                    <Phone className="h-5 w-5 text-yellow-500" />
+                    <div>
+                      <p className="font-medium text-yellow-800">Quick Contacts</p>
+                      <p className="text-sm text-yellow-600">Instantly reachable emergency numbers</p>
                     </div>
                   </div>
                 </div>
               </div>
 
               {/* Emergency Contacts */}
-              <div className="space-y-3">
-                <h3 className="font-semibold text-gray-900">Emergency Contacts</h3>
-                
-                <button
-                  onClick={() => handleEmergencyCall('police')}
-                  className="w-full p-4 bg-blue-500 text-white rounded-xl hover:bg-blue-600 transition-colors flex items-center space-x-3"
-                >
-                  <Shield className="h-6 w-6" />
-                  <div className="text-left">
-                    <div className="font-bold">Railway Police</div>
-                    <div className="text-sm opacity-90">Call 139</div>
-                  </div>
-                </button>
-
-                <button
-                  onClick={() => handleEmergencyCall('ambulance')}
-                  className="w-full p-4 bg-green-500 text-white rounded-xl hover:bg-green-600 transition-colors flex items-center space-x-3"
-                >
-                  <Ambulance className="h-6 w-6" />
-                  <div className="text-left">
-                    <div className="font-bold">Ambulance</div>
-                    <div className="text-sm opacity-90">Call 108</div>
-                  </div>
-                </button>
-
-                <button
-                  onClick={() => handleEmergencyCall('women')}
-                  className="w-full p-4 bg-pink-500 text-white rounded-xl hover:bg-pink-600 transition-colors flex items-center space-x-3"
-                >
-                  <Users className="h-6 w-6" />
-                  <div className="text-left">
-                    <div className="font-bold">Women Helpline</div>
-                    <div className="text-sm opacity-90">Call 1091</div>
-                  </div>
-                </button>
-              </div>
-
-              {/* Safety Tips */}
-              <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-                <h4 className="font-semibold text-yellow-800 mb-2">Safety Guidelines:</h4>
-                <div className="text-yellow-700 text-sm space-y-1">
-                  <p>• Stay calm and speak clearly</p>
-                  <p>• Provide exact location details</p>
-                  <p>• Describe the nature of emergency</p>
-                  <p>• Follow instructions from authorities</p>
-                  <p>• Keep your phone charged during travel</p>
+              <div>
+                <h3 className="font-semibold text-gray-900 mb-2">Emergency Contacts</h3>
+                <div className="space-y-3">
+                  {emergencyContacts.map((contact) => (
+                    <button
+                      key={contact.number}
+                      onClick={() => handleEmergencyCall(contact.type)}
+                      className={`w-full p-3 rounded-lg border ${
+                        contact.type === 'primary'
+                          ? 'bg-red-600 text-white border-red-700 hover:bg-red-700'
+                          : 'bg-gray-100 border-gray-300 hover:bg-gray-200 text-gray-900'
+                      } flex items-center justify-between`}
+                    >
+                      <span>{contact.name}</span>
+                      <span className="font-semibold">{contact.number}</span>
+                    </button>
+                  ))}
                 </div>
               </div>
             </div>
@@ -330,209 +313,95 @@ const SafetyDashboard: React.FC = () => {
     );
   }
 
-  // Emergency Activated Screen
+  // Panic Button Active with countdown and Cancel
   if (isPanicActive) {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-gray-50 flex flex-col">
         <Header />
-        <div className="fixed inset-0 bg-red-600 bg-opacity-95 z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl p-8 max-w-md w-full text-center shadow-2xl">
-            <div className="animate-pulse">
-              <AlertTriangle className="h-16 w-16 text-red-500 mx-auto mb-4" />
-            </div>
-            
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">EMERGENCY ACTIVATED</h2>
-            <p className="text-gray-600 mb-6">Alert being sent to Railway Police and your emergency contacts</p>
-            
-            <div className="text-4xl font-bold text-red-500 mb-6">{countdown}</div>
-            
-            <div className="grid grid-cols-3 gap-4 mb-6">
-              <div className="flex flex-col items-center">
-                <div className="p-3 bg-red-100 rounded-full mb-2">
-                  <MapPin className="h-6 w-6 text-red-500" />
-                </div>
-                <span className="text-xs text-gray-600">Location Shared</span>
-              </div>
-              <div className="flex flex-col items-center">
-                <div className="p-3 bg-red-100 rounded-full mb-2">
-                  <Mic className={`h-6 w-6 text-red-500 ${isRecording ? 'animate-pulse' : ''}`} />
-                </div>
-                <span className="text-xs text-gray-600">Recording Audio</span>
-              </div>
-              <div className="flex flex-col items-center">
-                <div className="p-3 bg-red-100 rounded-full mb-2">
-                  <Video className={`h-6 w-6 text-red-500 ${isRecording ? 'animate-pulse' : ''}`} />
-                </div>
-                <span className="text-xs text-gray-600">Recording Video</span>
-              </div>
-            </div>
-            
-            <button 
+        <main className="flex-grow flex flex-col items-center justify-center p-6">
+          <div className="bg-red-600 rounded-3xl p-8 max-w-md w-full text-center shadow-lg animate-pulse">
+            <AlertTriangle className="mx-auto mb-4 h-12 w-12 text-white" />
+            <h2 className="text-white text-3xl font-bold mb-2">Emergency Activated</h2>
+            <p className="text-red-100 text-lg mb-4">Sharing live location and alerting authorities</p>
+            <p className="text-white text-5xl font-extrabold mb-6">{countdown}</p>
+            <button
               onClick={cancelPanic}
-              className="w-full bg-gray-600 text-white py-3 rounded-lg hover:bg-gray-700 transition-colors font-semibold"
+              className="bg-white text-red-600 font-semibold px-6 py-3 rounded-full hover:bg-gray-100 transition-colors"
             >
-              Cancel Emergency
+              Cancel Alert
             </button>
           </div>
-        </div>
+        </main>
       </div>
     );
   }
 
+  // Default Dashboard view (non-emergency)
   return (
     <div className="min-h-screen bg-gray-50">
       <Header />
-      
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Safety Dashboard</h1>
-          <p className="text-gray-600">Your personal safety command center with AI-powered protection</p>
-        </div>
+      <main className="p-6 max-w-4xl mx-auto space-y-6">
+        <h1 className="text-2xl font-bold text-gray-900 mb-4">Safety Dashboard</h1>
 
-        <div className="grid lg:grid-cols-3 gap-8">
-          {/* Main Safety Panel */}
-          <div className="lg:col-span-2 space-y-6">
-            {/* Emergency Panic Section */}
-            <div className="bg-white rounded-2xl shadow-lg p-6">
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-xl font-bold text-gray-900">Emergency Response</h2>
-                <div className="flex items-center space-x-2 px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm">
-                  <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                  <span>Protected</span>
+        {/* Show Panic Button */}
+        <button
+          onClick={() => setShowEmergencyMenu(true)}
+          className="w-full max-w-xs mx-auto p-6 bg-gradient-to-br from-red-500 to-red-600 text-white rounded-xl hover:from-red-600 hover:to-red-700 transition-all transform hover:scale-105 shadow-lg block"
+        >
+          <AlertTriangle className="h-8 w-8 mx-auto mb-2" />
+          <h3 className="text-lg font-bold mb-1">PANIC BUTTON</h3>
+          <p className="text-red-100 text-sm">Immediate emergency alert</p>
+        </button>
+
+        {/* Safety Features Overview */}
+        <section>
+          <h2 className="text-xl font-semibold mb-3">Active Safety Features</h2>
+          <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {safetyFeatures.map(({ icon: Icon, title, description, status, color }) => (
+              <li
+                key={title}
+                className="bg-white p-4 rounded-lg shadow flex items-center space-x-4"
+              >
+                <Icon className={h-8 w-8 ${color}} />
+                <div>
+                  <p className="font-semibold text-gray-900">{title}</p>
+                  <p className="text-gray-600 text-sm">{description}</p>
+                  <p className={text-xs mt-1 font-semibold ${color}}>{status}</p>
                 </div>
-              </div>
+              </li>
+            ))}
+          </ul>
+        </section>
 
-              <div className="text-center p-8 bg-gradient-to-br from-red-50 to-orange-50 rounded-2xl border border-red-200">
-                <div className="mb-6">
-                  <button 
-                    onClick={() => setShowEmergencyMenu(true)}
-                    className="p-6 bg-red-500 text-white rounded-full shadow-2xl hover:bg-red-600 transition-all transform hover:scale-110 animate-pulse"
-                    title="Emergency Panic Button - Press for immediate help"
-                  >
-                    <AlertTriangle className="h-12 w-12" />
-                  </button>
-                </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-2">PANIC BUTTON</h3>
-                <p className="text-gray-600 mb-4">Press the red button above for immediate emergency assistance</p>
-                <p className="text-sm text-red-600 font-medium">All safety features are enabled and monitoring your journey</p>
-              </div>
-            </div>
-
-            {/* Safety Features */}
-            <div className="bg-white rounded-2xl shadow-lg p-6">
-              <h2 className="text-xl font-bold text-gray-900 mb-6">Safety Features Status</h2>
-              <div className="grid md:grid-cols-2 gap-4">
-                {safetyFeatures.map((feature, index) => {
-                  const IconComponent = feature.icon;
-                  return (
-                    <div key={index} className="p-4 border border-gray-200 rounded-xl hover:shadow-md transition-shadow">
-                      <div className="flex items-start space-x-3">
-                        <div className="p-2 bg-gray-100 rounded-lg">
-                          <IconComponent className={`h-5 w-5 ${feature.color}`} />
-                        </div>
-                        <div className="flex-1">
-                          <h3 className="font-semibold text-gray-900">{feature.title}</h3>
-                          <p className="text-sm text-gray-600 mt-1">{feature.description}</p>
-                          <div className={`text-xs font-medium mt-2 ${feature.color}`}>
-                            {feature.status}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-
-            {/* Recent Safety Alerts */}
-            <div className="bg-white rounded-2xl shadow-lg p-6">
-              <h2 className="text-xl font-bold text-gray-900 mb-6">Recent Safety Alerts</h2>
-              <div className="space-y-4">
-                {recentAlerts.map((alert) => (
-                  <div key={alert.id} className="p-4 border border-gray-200 rounded-xl">
-                    <div className="flex items-start justify-between">
-                      <div className="flex items-start space-x-3">
-                        <div className={`p-2 rounded-full ${
-                          alert.status === 'active' ? 'bg-red-100' : 'bg-green-100'
-                        }`}>
-                          {alert.status === 'active' ? (
-                            <AlertTriangle className="h-4 w-4 text-red-500" />
-                          ) : (
-                            <CheckCircle className="h-4 w-4 text-green-500" />
-                          )}
-                        </div>
-                        <div>
-                          <h3 className="font-semibold text-gray-900 capitalize">{alert.type} Alert</h3>
-                          <p className="text-sm text-gray-600">{alert.location}</p>
-                          <p className="text-xs text-gray-500 mt-1">Responded by: {alert.responder}</p>
-                        </div>
-                      </div>
-                      <div className="text-right">
-                        <div className={`px-2 py-1 rounded-full text-xs font-medium ${
-                          alert.status === 'active' 
-                            ? 'bg-red-100 text-red-700' 
-                            : 'bg-green-100 text-green-700'
-                        }`}>
-                          {alert.status}
-                        </div>
-                        <div className="text-xs text-gray-500 mt-1">{alert.time}</div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          {/* Sidebar */}
-          <div className="space-y-6">
-            {/* Emergency Contacts */}
-            <div className="bg-white rounded-2xl shadow-lg p-6">
-              <h2 className="text-xl font-bold text-gray-900 mb-6">Emergency Contacts</h2>
-              <div className="space-y-3">
-                {emergencyContacts.map((contact, index) => (
-                  <button
-                    key={index}
-                    className={`w-full p-4 rounded-xl border-2 transition-all hover:shadow-md ${
-                      contact.type === 'primary'
-                        ? 'border-red-200 bg-red-50 hover:bg-red-100'
-                        : 'border-gray-200 bg-gray-50 hover:bg-gray-100'
+        {/* Recent Alerts */}
+        <section>
+          <h2 className="text-xl font-semibold mb-3">Recent Alerts</h2>
+          <ul className="space-y-3">
+            {recentAlerts.map(({ id, type, location, time, status, responder }) => (
+              <li
+                key={id}
+                className={`p-4 rounded-lg shadow ${
+                  status === 'active' ? 'bg-red-50 border border-red-400' : 'bg-gray-100'
+                }`}
+              >
+                <div className="flex justify-between items-center mb-1">
+                  <h3 className="font-semibold capitalize">{type} alert</h3>
+                  <span
+                    className={`text-xs font-semibold uppercase ${
+                      status === 'active' ? 'text-red-600' : 'text-green-600'
                     }`}
                   >
-                    <div className="flex items-center justify-between">
-                      <div className="text-left">
-                        <h3 className="font-semibold text-gray-900">{contact.name}</h3>
-                        <p className="text-2xl font-bold text-red-600">{contact.number}</p>
-                      </div>
-                      <Phone className="h-6 w-6 text-gray-400" />
-                    </div>
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Safety Tips */}
-            <div className="bg-white rounded-2xl shadow-lg p-6">
-              <h2 className="text-xl font-bold text-gray-900 mb-6">Safety Tips</h2>
-              <div className="space-y-4">
-                <div className="p-3 bg-blue-50 rounded-lg border border-blue-200">
-                  <p className="text-sm text-blue-800 font-medium">Always keep your phone charged during travel</p>
+                    {status}
+                  </span>
                 </div>
-                <div className="p-3 bg-green-50 rounded-lg border border-green-200">
-                  <p className="text-sm text-green-800 font-medium">Share your journey details with family</p>
-                </div>
-                <div className="p-3 bg-yellow-50 rounded-lg border border-yellow-200">
-                  <p className="text-sm text-yellow-800 font-medium">Stay alert in crowded areas</p>
-                </div>
-                <div className="p-3 bg-purple-50 rounded-lg border border-purple-200">
-                  <p className="text-sm text-purple-800 font-medium">Use the panic button if you feel unsafe</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+                <p className="text-sm text-gray-700">{location}</p>
+                <p className="text-xs text-gray-500">{time}</p>
+                <p className="text-xs text-gray-500 italic">Responder: {responder}</p>
+              </li>
+            ))}
+          </ul>
+        </section>
+      </main>
     </div>
   );
 };
